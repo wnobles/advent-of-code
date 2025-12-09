@@ -1,25 +1,7 @@
-def part1(data: list) -> int:
+def get_invalid_ids(data: list) -> int:
 
-    id_sum = 0
-
-    for line in data:
-        start, stop = line.split("-")
-        start, stop = int(start), int(stop)
-
-        for i in range(start, stop + 1):
-            len_num = len(str(i))
-            if len_num > 1 and len_num % 2 == 0:
-                mod_amt = 10 ** (len_num / 2)
-                first_half = i % mod_amt
-                second_half = i // mod_amt
-                if first_half == second_half:
-                    id_sum += i
-
-    return id_sum
-
-def part2(data: list) -> int:
-
-    id_sum = 0
+    repeated_twice = 0
+    repeated = 0
 
     for line in data:
         start, stop = line.split("-")
@@ -33,16 +15,22 @@ def part2(data: list) -> int:
                 largest_repeat = len(num) // 2
 
                 # Look at progressively smaller chunks
-                while largest_repeat > 0:
-                    digits_list = [num[j:j+largest_repeat] for j in range(0, len(num), largest_repeat)]
+                for j in range(largest_repeat, 0, -1):
+                    digits_list = [
+                        num[k:k+j]
+                        for k in range(0, len(num), j)]
                     if len(set(digits_list)) == 1:
-                        id_sum += i
+                        if j == largest_repeat and len(num) % 2 == 0:
+                            repeated_twice += i
+                            repeated += i
+                        else:
+                            repeated += i
                         break
-                    largest_repeat -= 1
 
-    return id_sum
+    return repeated_twice, repeated
 
 with open("2025/data/day2_input.txt") as f:
     read_data = f.read()
 read_data = read_data.split(",")
-print(f"Part 1: {part1(read_data)}, Part 2: {part2(read_data)}")
+
+print(f"Invalid IDs (Part 1, Part 2): {get_invalid_ids(read_data)}")
