@@ -1,4 +1,4 @@
-def get_invalid_ids(data: list) -> int:
+def get_invalid_ids(data: list) -> tuple[int, int]:
 
     repeated_twice = 0
     repeated = 0
