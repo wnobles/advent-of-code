@@ -1,29 +1,10 @@
-def part1(data: list) -> int:
+def get_largest_joltages(data: list, batteries: int) -> int:
 
-    num = 0
-    for line in data:
-        first_digit = str(max(map(int, line)))
-        first_idx = line.index(str(first_digit))
-
-        if first_idx == len(line) - 1:
-            remaining_line = line[:first_idx]
-            second_digit = first_digit
-            first_digit = str(max(map(int, remaining_line)))
-        else:
-            remaining_line = line[first_idx+1:]
-            second_digit = str(max(map(int, remaining_line)))
-
-        num += int(first_digit + second_digit)
-
-    return num
-
-def part2(data: list) -> int:
-
-    num = 0
+    total = 0
     for line in data:
 
         digits = ""
-        counter = 11
+        counter = batteries - 1
         start = 0
         while counter >= 0:
 
@@ -42,12 +23,11 @@ def part2(data: list) -> int:
             start += max_idx + 1
             counter -= 1
 
-        num += int(digits)
+        total += int(digits)
 
-    return num
-
+    return total
 
 with open("2025/data/day3_input.txt") as f:
     read_data = f.read().splitlines()
-print(f"Part1: {part1(read_data)}")
-print(f"Part2: {part2(read_data)}")
+print(f"Part 1: {get_largest_joltages(read_data, 2)}")
+print(f"Part 2: {get_largest_joltages(read_data, 12)}")
