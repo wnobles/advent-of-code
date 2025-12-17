@@ -1,15 +1,4 @@
-def part1(ids: list, ranges: list) -> int:
-
-    id_ranges = [range(start, stop) for start, stop in ranges]
-
-    fresh_ids = 0
-
-    for id in ids:
-        fresh_ids += any(id in id_range for id_range in id_ranges)
-
-    return fresh_ids
-
-def part2(ranges: list) -> int:
+def get_num_ids(ranges: list, ids: list = None) -> int:
 
     sorted_ranges = sorted(ranges)
     consolidated_ranges = [sorted_ranges.pop(0)]
@@ -21,8 +10,14 @@ def part2(ranges: list) -> int:
         else:
             consolidated_ranges.append([start, stop])
 
-    fresh_ids = sum(
-        [len(range(start, stop)) for start, stop in consolidated_ranges])
+    id_ranges = [range(start, stop) for start, stop in consolidated_ranges]
+
+    if ids:
+        fresh_ids = 0
+        for id in ids:
+            fresh_ids += any(id in id_range for id_range in id_ranges)
+    else:
+        fresh_ids = sum([len(x) for x in id_ranges])
 
     return fresh_ids
 
@@ -41,5 +36,5 @@ with open("2025/data/day5_input.txt") as f:
         ingredient_ids.append(int(ingredient_id))
         ingredient_id = f.readline().strip()
 
-print(f"Part 1: {part1(ingredient_ids, ingredient_ranges)}")
-print(f"Part 2: {part2(ingredient_ranges)}")
+print(f"Part 1: {get_num_ids(ingredient_ranges, ingredient_ids)}")
+print(f"Part 2: {get_num_ids(ingredient_ranges)}")
